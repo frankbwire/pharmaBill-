@@ -1,0 +1,16 @@
+PharmaBill+
+===========
+Template by Colorlib
+Coding by KnightlyPro
+
+//Introduction
+* Pharmabill+ has three users: Adminnistrator, Pharmacist and Normal User.
+* Each user has access to different contents of the system.
+a. Admin - can modify, and or remove tables in the database
+b. Pharmacist  - can do patient billing, register new patioents and develop invoices
+c. Normal User - has access to latest news or blogs about to pharmacy and the pharmacy industry.
+
+
+//How to install the system
+1. Change server configuration (login details) in pharmabill/config.php
+2. Iport database to server. Use file resources/pharmabill_db.sql
