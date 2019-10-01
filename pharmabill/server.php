@@ -65,7 +65,9 @@ $medcat='';
 $medname='';
 $medqty='';
 $medprice='';
-$total='';
+$total= 0;
+$total2= 0;
+$ttl="";
 $errors=array();
 
 //bill patient
@@ -78,8 +80,21 @@ $medcat=mysqli_real_escape_string($conn,$_POST['medcat']);
 $medname=mysqli_real_escape_string($conn,$_POST['medname']);
 $medqty=mysqli_real_escape_string($conn,$_POST['medqty']);
 $medprice=mysqli_real_escape_string($conn,$_POST['medprice']);
+//med 2
+$medcat2=mysqli_real_escape_string($conn,$_POST['medcat2']);
+$medname2=mysqli_real_escape_string($conn,$_POST['medname2']);
+$medqty2=mysqli_real_escape_string($conn,$_POST['medqty2']);
+$medprice2=mysqli_real_escape_string($conn,$_POST['medprice2']);
 
   $total=$medqty * $medprice;
+  if(empty($medqty2)){
+    null;
+  }
+  else{
+    $total2=$medqty2 * $medprice2;
+   
+  }
+  $ttl=$total + $total2;
 //check if user exists in patients table
 //$check="select * from patients where patient_id = '$bpid' LIMIT = '1'";
    // $qcheck=mysqli_query($conn,$check);
@@ -91,15 +106,30 @@ $result=mysqli_query($conn,$sql);
   if(!$result){
     echo 'query failed to execute' . mysqli_error($conn);
   }
-  echo "query success";
+
   
   //inset billing details in drug purchase table
-  $sql2="insert into drug_purchase (patient_id,bill_number,med_category,med_name,med_quantity,med_price,total) values ('$bpid','$bnumber','$medcat','$medname','$medqty','$medprice','$total') ";
+  $sql2="insert into drug_purchase (patient_id,bill_number,med_category,med_name,med_quantity,med_price,total) values ('$bpid','$bnumber','$medcat','$medname','$medqty','$medprice','$ttl') ";
   $result2=mysqli_query($conn,$sql2);
   if(!$result2){
     echo "query 2 failed to execute" . mysqli_error($conn);
   }
-  echo "query2 successful";
+
+  //Medine 2
+  
+  //inset billing details in drug purchase table
+  if(empty($medname2)){
+    null;
+  }
+  else{
+    $sq2="insert into drug_purchase (patient_id,bill_number,med_category,med_name,med_quantity,med_price,total) values ('$bpid','$bnumber','$medcat2','$medname2','$medqty2','$medprice','$ttl') ";
+    $rs2=mysqli_query($conn,$sq2);
+    if(!$rs2){
+      echo "query 2 failed to execute" . mysqli_error($conn);
+    }
+
+  }
+
   
 }
 ?>

@@ -23,10 +23,11 @@ require "loginserver.php";
   <style type="text/css">
   
     body{
-      background-image: url(img/.jpg);
+      background-image: url(img/operatef.jpg);
       background-size: cover;
       background-position:bottom;
       background-repeat: no-repeat;
+      
     }
 
     a{
@@ -43,7 +44,7 @@ require "loginserver.php";
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                 <header class="mb-5">
                     <h3 class="mt-0 white-text"><img src="img/pharmabill_white.png"></h3>
-                    <p class="grey-text mb-4">A Kut Jok Kuol project designed to focus on the medical store to help pharmaciscts in  billing management .</p>
+                    <p class="white-text mb-4">A Kut Jok Kuol project designed to focus on the medical store to help pharmaciscts in  billing management .</p>
                            <hr>
                     <p><?php include('errors.php'); ?></p>
                    
@@ -51,7 +52,7 @@ require "loginserver.php";
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                  <div class="input-field">
-            <p class="grey-text mb-4" style="text-align: left;">Pharmacists login below:</p>
+            <p class="white-text mb-4" style="text-align: left;">Pharmacists login below:</p>
           </div>
                 <form action="" method="post" class="tm-signup-form">
                     <div class="input-field">
@@ -66,8 +67,8 @@ require "loginserver.php";
                         <button type="submit" class="waves-effect btn-large btn-large-white px-4 tm-border-radius-3" name="plogin" >Login</button>
                     </div>
                          <div class="input-field">
-                           <p class="grey-text mb-4" style="text-align: left">Administrator<b>:</b>  <a href="indexadmin.php">login</a></p>
-                             <p class="grey-text mb-4" style="text-align: left">Normal User<b>:</b> <a href="indexuser.php">login</a></p>
+                           <p class="white-text mb-4" style="text-align: left">Administrator<b>:</b>  <a href="indexadmin.php">login</a></p>
+                             <p class="white-text mb-4" style="text-align: left">Normal User<b>:</b> <a href="indexuser.php">login</a></p>
                   </div>
                 </form>
             </div>

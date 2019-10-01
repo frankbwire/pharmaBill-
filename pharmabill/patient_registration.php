@@ -1,6 +1,5 @@
 <?php
 require 'server.php';
-include '../loginserver.php';
 
   if (!isset($_SESSION['email'])) {
   	$_SESSION['msg'] = "You must log in first";
@@ -105,7 +104,7 @@ include '../loginserver.php';
                     </div>
                       <!--sign out-->
           <?php  if (isset($_SESSION['email'])) : ?>
-                    <p> <button href="../index.php?logout='1'" class="btn" id="btnlog">logout </button> </p>
+          <p> <a href="../index.php?logout='1'" class="btn" id="btnlog">logout</a> </p>
           <?php endif ?>
 
                 </nav>
@@ -124,8 +123,8 @@ include '../loginserver.php';
                         <p>Theme: Good Health to customers</p>
                     </div>
                     <div class="page_link">
-                        <a href="index.html" id="links">Home</a>
-                        <a href="patient_registration.html" id="links">Patient Info.</a>
+                        <a href="home_pharmacist.php" id="links">Home</a>
+                        <a href="patient_registration.php" id="links">Patient Info.</a>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,6 @@
 <?php
 
 require 'server.php';
-include '../loginserver.php';
 
   if (!isset($_SESSION['email'])) {
   	$_SESSION['msg'] = "You must log in first";
@@ -135,8 +134,8 @@ include '../loginserver.php';
             <p>Theme: Good Health to customers</p>
           </div>
           <div class="page_link">
-            <a href="index.html" id="links">Home</a>
-            <a href="patient_bill.html" id="links">Patient Bill</a>
+            <a href="home_pharmacist.php" id="links">Home</a>
+            <a href="patient_bill.php" id="links">Patient Bill</a>
           </div>
         </div>
       </div>
@@ -151,7 +150,7 @@ include '../loginserver.php';
         <p>Proceed to billing</p>
         <hr>
 
-        <form class="row tracking_form" action="#" method="post" novalidate="novalidate" style="margin-left: 50px">
+        <form class="row tracking_form" action="patient_bill.php" method="post" novalidate="novalidate" style="margin-left: 50px">
 
           <div class="col-md-11 form-group" id="form-title">
             <p style="font-weight: bold; text-align: center;font-family:bauhaus 93; font-size: 0.8cm">iBill<strong style="color: #20c997">+</strong></p>
@@ -210,7 +209,7 @@ include '../loginserver.php';
           <!--====</section> <section>====-->
           <div class="col-md-11 form-group" style="padding-left:50px; padding-bottom: 15px">
             <!--medcat-->
-            <select style="width: 50%" name="city">
+            <select style="width: 50%" name="medcat2">
               <option>Medicine Category*</option>
               <option>ANAESTHETICS</option>
               <option>PAIN and PALLIATIVE CARE</option>
@@ -224,13 +223,13 @@ include '../loginserver.php';
             </select>
             <!--med name-->
             <label for="drugname" style="margin-left: 50px">Medicine Name:</label>
-            <input type="text" id="address" name="address" placeholder="Drug Name" style="width: 25%">
+            <input type="text" name="medname2" placeholder="Drug Name" style="width: 25%">
           </div>
           <div class="col-md-11 form-group" style="padding-left:50px; padding-bottom: 15px">
             <!--quantity-->
-            <input type="text" id="qty" name="qty" placeholder="Quantity " style="width: 40%">
+            <input type="text" name="medqty2" placeholder="Quantity " style="width: 40%">
             <!--price-->
-            <input type="text" id="price" name="price" placeholder="Price per unit" style="width: 40%; margin-left: 50px">
+            <input type="text" id="price" name="medprice2" placeholder="Price per unit" style="width: 40%; margin-left: 50px">
             <hr>
           </div>
           <!--====</section> <section>====-->

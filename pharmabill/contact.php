@@ -72,12 +72,10 @@ include 'contact_process.php';
               </div>
             </div>
           </div>
-          <!--sign out-->
+            <!--sign out-->
           <?php  if (isset($_SESSION['user_email'])) : ?>
           <p> <a href="../indexuser.php?logout='1'" class="btn" id="btnlog" name="logout">logout</a> </p>
           <?php endif ?>
-
-          
         </nav>
       </div>
     </div>

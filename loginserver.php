@@ -1,3 +1,4 @@
+<!--==(c)frankline_bwire==-->
 <?php
 session_start();
 include 'pharmabill/config.php';

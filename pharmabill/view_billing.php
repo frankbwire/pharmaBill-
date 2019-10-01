@@ -1,6 +1,6 @@
 <?php
 require 'server.php';
-include '../loginserver.php';
+
 
   if (!isset($_SESSION['email'])) {
   	$_SESSION['msg'] = "You must log in first";
@@ -146,9 +146,9 @@ $result2=mysqli_query($conn,$query2);
               </div>
             </div>
           </div>
-          <!--sign out-->
-          <?php  if (isset($_SESSION['email'])) : ?>
-          <p> <button href="../index.php?logout='1'" class="btn" id="btnlog">logout </button> </p>
+           <!--sign out-->
+           <?php  if (isset($_SESSION['email'])) : ?>
+          <p> <a href="../index.php?logout='1'" class="btn" id="btnlog">logout</a> </p>
           <?php endif ?>
 
         </nav>
@@ -167,8 +167,8 @@ $result2=mysqli_query($conn,$query2);
             <p>Theme: Good Health to customers</p>
           </div>
           <div class="page_link">
-            <a href="index.html" id="links">Home</a>
-            <a href="view_patient.php" id="links">View Patients</a>
+            <a href="home_pharmacist.php" id="links">Home</a>
+            <a href="view_billing.php" id="links">Invoice</a>
           </div>
         </div>
       </div>
@@ -186,7 +186,7 @@ $result2=mysqli_query($conn,$query2);
         <form action="#" style="width:25%">
           <div class="form-group">
             <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Search by bill_id" id="myInput" onkeyup="myFunction()">
+              <input type="text" class="form-control" value="SN-" id="myInput" onkeyup="myFunction()">
               <div class="input-group-append">
                 <button class="btn" type="button"><i class="ti-search" name="search"></i></button>
               </div>

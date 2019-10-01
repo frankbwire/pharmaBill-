@@ -1,7 +1,7 @@
 PharmaBill+
 ===========
 Template by Colorlib
-Coding by KnightlyPro
+Coding by (c) Frankline Bwire
 
 //Introduction
 * Pharmabill+ has three users: Adminnistrator, Pharmacist and Normal User.
@@ -13,4 +13,4 @@ c. Normal User - has access to latest news or blogs about to pharmacy and the ph
 
 //How to install the system
 1. Change server configuration (login details) in pharmabill/config.php
-2. Iport database to server. Use file resources/pharmabill_db.sql
+2. Import database to server. Use file resources/pharmabill_db.sql

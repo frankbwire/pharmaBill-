@@ -1,6 +1,6 @@
 <?php
 require 'server.php';
-include '../loginserver.php';
+
 
   if (!isset($_SESSION['email'])) {
   	$_SESSION['msg'] = "You must log in first";
@@ -11,14 +11,18 @@ include '../loginserver.php';
   	unset($_SESSION['email']);
   	header("location: ../index.php");
   }
-/*Display all data in table
-*All data filtered by Date
-*Latest data will be shown first
-*/
-$query="SELECT * FROM `patients` ORDER by registration_date DESC ";
-$result=mysqli_query($conn,$query);
-$query2="SELECT * FROM `emergency_contacts`";
-$result2=mysqli_query($conn,$query2);
+?>
+<!--Search Query-->
+<?php
+$search="";
+$result="";
+if(isset($_POST["searchbtn"])){
+    $search=mysqli_real_escape_string($conn,$_POST["search"]);
+    //get data from multiple tables (join)
+    $sql="Select * from patients, emergency_contacts where patients.patient_id = '$search' and emergency_contacts.patient_id = '$search'";
+    $query=mysqli_query($conn,$sql) or die ("Unable to get result". mysqli_error($conn));
+    $result=mysqli_fetch_assoc($query);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +32,7 @@ $result2=mysqli_query($conn,$query2);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <!--Auto Refresh-->
-    <meta http-equiv="refresh" content="30">
+    <!-- <meta http-equiv="refresh" content="30"> -->
     <link rel="icon" href="../img/favicon.png" type="image/png" />
     <title>Pharmabill+</title>
     <!-- Bootstrap CSS -->
@@ -45,12 +49,12 @@ $result2=mysqli_query($conn,$query2);
     <!-- main css -->
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/responsive.css" />
-     <script type="text/javascript">
+    <script type="text/javascript">
 
-         
-         
-         
-         </script>
+
+
+
+    </script>
     <style type="text/css">
         input {
 
@@ -68,27 +72,37 @@ $result2=mysqli_query($conn,$query2);
             color: wheat;
             font-weight: bold;
         }
-        table{
+
+        table {
             text-align: center;
             border-width: medium;
             width: 100%;
-            
+
         }
-        th{
-          
+
+        th {
+
             border-bottom-width: medium;
         }
-        #pid{
+
+        #pid {
             font-weight: bold;
         }
-        footer{
+
+        footer {
             margin-top: 60px;
         }
-        #td{
+
+        #td {
             text-align: left;
             padding-left: 20px
         }
 
+        label {
+            margin-left: 30px;
+            margin-right: 15px;
+            font-weight: 600;
+        }
     </style>
 </head>
 
@@ -124,7 +138,7 @@ $result2=mysqli_query($conn,$query2);
                                     <li class="nav-item">
                                         <a class="nav-link" href="patient_bill.php">Bill Patient</a>
                                     </li>
-                                     <li class="nav-item submenu dropdown">
+                                    <li class="nav-item submenu dropdown">
                                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages</a>
                                         <ul class="dropdown-menu">
                                             <li class="nav-item">
@@ -142,7 +156,7 @@ $result2=mysqli_query($conn,$query2);
                     </div>
                     <!--sign out-->
                     <?php  if (isset($_SESSION['email'])) : ?>
-                    <p> <button href="../index.php?logout='1'" class="btn" id="btnlog">logout </button> </p>
+                    <p> <a href="../index.php?logout='1'" class="btn" id="btnlog">logout</a> </p>
                     <?php endif ?>
 
                 </nav>
@@ -157,12 +171,12 @@ $result2=mysqli_query($conn,$query2);
             <div class="container">
                 <div class="banner_content d-md-flex justify-content-between align-items-center">
                     <div class="mb-3 mb-md-0" style="color:#ccffff">
-                        <h2 style="font-weight: 900; font-family:monospace; color: white">View Patients</h2>
+                        <h2 style="font-weight: 900; font-family:monospace; color: white">Search Patients</h2>
                         <p>Theme: Good Health to customers</p>
                     </div>
                     <div class="page_link">
-                        <a href="index.html" id="links">Home</a>
-                        <a href="view_patient.php" id="links">View Patients</a>
+                        <a href="home_pharmacist.php" id="links">Home</a>
+                        <a href="view_patient.php" id="links">Search Patients</a>
                     </div>
                 </div>
             </div>
@@ -174,108 +188,115 @@ $result2=mysqli_query($conn,$query2);
         <div class="container">
             <div class="tracking_box_iner">
                 <h3>Patient Details</h3>
-                <p>All patient details are showed in the table below</p>
+                <p>Want to search for a specific patient. Use the search feature below to get single patient records including emergency contacts and relevant personal details required.</p>
                 <hr>
+                <!--=======Search Input=========-->
+                <form action="view_patient.php" style="width:25%" method="post">
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" value="N-" name="search">
+                            <div class="input-group-append">
+                                <button class="btn" type="submit" name="searchbtn"><i class="ti-search" name="search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!--============Search Output============-->
+                <?php
+                if($result == true){
+                ?>
 
-                <table align="center" border="1" id="myTable">
-                    <tr>
-                        <th>Patient_id</th>
-                        <th>Names</th>
-                        <th>Contact information</th>
-                        <th>ID Number</th>
-                        <th>Address</th>
-                        <th>Age</th>
-                        <th>Registration Date</th>
-                    </tr>
-                    <?php
-                            while ($rows=mysqli_fetch_assoc($result))
-                            {
-                             ?>
-                    <tr>
-                        <td id="pid">
-                            <?php echo $rows['patient_id']; ?>
-                        </td>
-                        <td id="td">
-                            <?php echo $rows['first_name']; ?>
-                            <br>
-                           <?php echo $rows['middle_name']; ?>
-                            <br>
-                            <?php echo $rows['last_name']; ?>
-                        </td>
-                        <td id="td"> <strong>email:</strong>
-                            <?php echo $rows['patient_email']; ?>
-                            <br>
-                            <strong>phone:</strong>
-                            <?php echo $rows['patient_phone']; ?>
-                        </td>
+                <form class="row tracking_form" novalidate="novalidate" style="margin-left: 50px">
+                    <div class="col-md-11 form-group" id="form-title">
+                        <strong style="margin-left: 25px;padding-right: 10px; color: #20c997">Patient Information:</strong>
+                        <hr>
+                    </div>
+                    <div class="col-md-12 form-group" style="padding-left:50px; padding-bottom: 15px; ">
 
-                        <td id="td">
-                            <?php echo $rows['id_number']; ?>
-                        </td>
-                        <td id="td">
-                            <?php echo $rows['patient_city']; ?>
-                            <br>
-                            <?php echo $rows['patient_address']; ?>
-                        </td>
-                        <td id="td">
-                        <?php echo $rows['patient_gender']; ?>
-                            <br>
-                            <?php echo $rows['patient_age']; ?>
-                            years
-                        </td>
-                        <td>
-                        <?php echo $rows['registration_date']; ?>
-                        </td>
+                        <label for="customerid">Patient ID:</label>
+                        <input type="text" value="<?php  echo $result["patient_id"]?>" readonly>
 
-                    </tr>
-                    <?php
-                           }
-                           ?>
-                </table>
-                <h3 class="mb-20" style="font-weight: bold; margin-top:20px">Emergency Contacts:</h3>
-                <table align="center" border="1" id="myTable">
-                    <tr>
-                        <th>Patient_id</th>
-                        <th>Kin Names</th>
-                        <th>Phone Number</th>
-                        <th>ID Number</th>
-                        <th>Gender</th>
-                        <th>Relationship</th>
-                       
-                    </tr>
-                    <?php
-                            while ($rows=mysqli_fetch_assoc($result2))
-                            {
-                             ?>
-                    <tr>
-                        <td id="pid">
-                            <?php echo $rows['patient_id']; ?>
-                        </td>
-                        <td id="td">
-                            <?php echo $rows['kin_name']; ?>
-                        </td>
-                        <td id="td">
-                            <?php echo $rows['kin_phone']; ?>
-                        </td>
+                        <label for="date" style="margin-left:20px">Registration Date:</label>
+                        <input type="text" placeholder="Current Date" value="<?php  echo $result["registration_date"]?>" readonly>
+                    </div>
+                    <div class="col-md-12 form-group" style="padding-left:50px; padding-bottom: 15px">
+                        <!--first name-->
+                        <label for="Patient Names:">Patient Names:</label>
+                        <input type="text" placeholder="First Name" value="<?php  echo $result["first_name"]?>" readonly>
+                        <!--middle name-->
+                        <input type="text" placeholder="Middle Name" value="<?php  echo $result["middle_name"]?>" readonly>
+                        <!--last name-->
+                        <input type="text" placeholder="Last Name" value="<?php  echo $result["last_name"]?>" readonly>
+                    </div>
+                    <div class="col-md-12 form-group" style="padding-left:50px; padding-bottom: 15px">
+                        <!--age-->
+                        <label for="age">Age:</label>
+                        <input type="text" placeholder="Age" value="<?php  echo $result["patient_age"]?>" readonly>
 
-                        <td id="td">
-                            <?php echo $rows['kin_id']; ?>
-                        </td>
-                        <td id="td">
-                            <?php echo $rows['kin_gender']; ?>
-                           
-                        </td>
-                        <td id="td">
-                        <?php echo $rows['relationship']; ?>
-                         
-                        </td>
-                   
-                    </tr>
-                    <?php
-                           }
-                           ?>
-                </table>
+                        <!--gender-->
+                        <label for="gender" style="color:#20c997">Gender:</label>
 
+                        <input type="text" value="<?php  echo $result["patient_gender"]?>" readonly>
+                    </div>
+                    <div class="col-md-12 form-group" style="padding-left:50px; padding-bottom: 15px">
+
+                        <!--id number-->
+                        <label for="IDNumber">ID Number:</label>
+                        <input type="text" placeholder="ID Number" value="<?php  echo $result["id_number"]?>" readonly>
+                        <!--phone number-->
+                        <label for="phone">Phone Number:</label>
+                        <input type="text" placeholder="Phone Number" value="<?php  echo $result["patient_phone"]?>" readonly>
+                    </div>
+                    <div class="col-md-12 form-group" style="padding-left:50px; padding-bottom: 15px">
+
+                        <!--email-->
+                        <label for="email">Email:</label>
+                        <input type="text" placeholder="Email Address" value="<?php  echo $result["patient_email"]?>" readonly>
+                    </div>
+
+
+                    <div class="col-md-12 form-group" style="padding-left:50px; padding-bottom: 15px">
+                        <!--City-->
+                        <label for="city">City:</label>
+                        <input type="text" value="<?php  echo $result["patient_city"]?>" readonly>
+                        <!--Address-->
+                        <label for="address">Address:</label>
+                        <input type="text" value="<?php  echo $result["patient_address"]?>" readonly>
+                    </div>
+
+                    <div class="col-md-11 form-group">
+                        <strong style="margin-left: 25px;padding-right: 10px; color: #20c997">Patient Emergency Contacts:</strong>
+                        <hr>
+                    </div>
+                    <div class="col-md-12 form-group" style="padding-left:50px; padding-bottom: 15px">
+                        <!--emergency name-->
+                        <label for="kin">Kin Name:</label>
+                        <input type="text" placeholder="Name of local friend or relative " value="<?php  echo $result["kin_name"]?>" readonly>
+                        <!--relationship-->
+                        <label for="relationship">Kin Relation:</label>
+                        <input type="text" placeholder="Relationship to patient" value="<?php  echo $result["relationship"]?>" readonly>
+                    </div>
+
+                    <div class="col-md-12 form-group" style="padding-left:50px; padding-bottom: 15px">
+                        <!--emergency phone-->
+                        <label for="kin phone">Kin Phone:</label>
+                        <input type="text" placeholder="Phone Number" value="<?php  echo $result["kin_phone"]?>" readonly>
+                        <!--gender-->
+                        <label for="kin gen" style="color:#20c997"> Gender:</label>
+                        <input type="text" value="<?php  echo $result["kin_gender"]?>" readonly>
+                    </div>
+                    <div class="col-md-12 form-group" style="padding-left:50px; padding-bottom: 15px">
+                        <!--emergency ID-->
+                        <label for="kin id">Kin ID Number:</label>
+                        <input type="text" placeholder="Kin ID Number" value="<?php  echo $result["kin_id"]?>" readonly>
+                    </div>
+                </form>
+                <?php
+                };
+    if(!$result){
+  echo "No results found for <strong style='color:red'>$search</strong> record, or the record does not exist. <br> Click <a href='patient_registration.php'><strong style=' color: #20c997'>here</strong></a> to register a new patient.";  
+};
+?>
 
             </div>
         </div>
@@ -284,38 +305,37 @@ $result2=mysqli_query($conn,$query2);
 
     <!--================ start footer Area  =================-->
     <footer class="footer-area section_gap">
-    <div class="container">
-      <div class="row">
-       
-        <div class="col-lg-4 col-md-6 single-footer-widget">
-          <h4>Newsletter</h4>
-          <p>You can trust us. we only send promo offers,</p>
-          <div class="form-wrap" id="mc_embed_signup">
-            <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01" method="get" class="form-inline">
-              <input class="form-control" name="EMAIL" placeholder="Your Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your Email Address '" required="" type="email">
-              <button class="click-btn btn btn-default">Subscribe</button>
-              <div style="position: absolute; left: -5000px;">
-                <input name="b_36c4fd991d266f23781ded980_aefe40901a" tabindex="-1" value="" type="text">
-              </div>
+        <div class="container">
+            <div class="row">
 
-              <div class="info"></div>
-            </form>
-          </div>
+                <div class="col-lg-4 col-md-6 single-footer-widget">
+                    <h4>Newsletter</h4>
+                    <p>You can trust us. we only send promo offers,</p>
+                    <div class="form-wrap" id="mc_embed_signup">
+                        <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01" method="get" class="form-inline">
+                            <input class="form-control" name="EMAIL" placeholder="Your Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your Email Address '" required="" type="email">
+                            <button class="click-btn btn btn-default">Subscribe</button>
+                            <div style="position: absolute; left: -5000px;">
+                                <input name="b_36c4fd991d266f23781ded980_aefe40901a" tabindex="-1" value="" type="text">
+                            </div>
+
+                            <div class="info"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom row align-items-center">
+                <p class="footer-text m-0 col-lg-8 col-md-12">
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    Copyright &copy;<script>
+                        document.write(new Date().getFullYear());
+                    </script> All rights reserved | made with <i class="fa fa-heart-o" aria-hidden="true"></i> by PharmaBill+
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                </p>
+
+            </div>
         </div>
-      </div>
-      <div class="footer-bottom row align-items-center">
-        <p class="footer-text m-0 col-lg-8 col-md-12">
-          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-          Copyright &copy;<script>
-            document.write(new Date().getFullYear());
-
-          </script> All rights reserved | made with <i class="fa fa-heart-o" aria-hidden="true"></i> by PharmaBill+
-          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-        </p>
-
-      </div>
-    </div>
-  </footer>
+    </footer>
     <!--================ End footer Area  =================-->
 
     <!-- Optional JavaScript -->
